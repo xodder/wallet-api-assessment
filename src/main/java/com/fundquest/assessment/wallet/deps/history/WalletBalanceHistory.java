@@ -2,6 +2,9 @@ package com.fundquest.assessment.wallet.deps.history;
 
 import java.sql.Timestamp;
 
+import org.hibernate.annotations.CreationTimestamp;
+
+import com.fundquest.assessment.transaction.Transaction;
 import com.fundquest.assessment.wallet.Wallet;
 import com.fundquest.assessment.wallet.deps.history.enums.WalletBalanceHistoryEvent;
 
@@ -24,6 +27,10 @@ public class WalletBalanceHistory {
     @JoinColumn(name = "wallet_id", nullable = false)
     private Wallet wallet;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "transaction_id", nullable = false)
+    private Transaction transaction;
+
     @Column(name = "balance_before")
     private Float balanceBefore;
 
@@ -34,6 +41,7 @@ public class WalletBalanceHistory {
     @Column(name = "event")
     private WalletBalanceHistoryEvent event;
 
+    @CreationTimestamp
     @Column(name = "recorded_at")
     private Timestamp recordedAt;
 

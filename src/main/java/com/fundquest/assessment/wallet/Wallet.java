@@ -2,6 +2,9 @@ package com.fundquest.assessment.wallet;
 
 import java.sql.Timestamp;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import com.fundquest.assessment.user.User;
 import com.fundquest.assessment.wallet.deps.type.WalletType;
 
@@ -38,9 +41,11 @@ public class Wallet {
     @Column(name = "balance")
     private Float balance;
 
+    @CreationTimestamp
     @Column(name = "created_at")
     private Timestamp createdAt;
 
+    @UpdateTimestamp
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 

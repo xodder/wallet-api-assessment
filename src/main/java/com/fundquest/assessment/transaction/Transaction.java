@@ -1,13 +1,19 @@
 package com.fundquest.assessment.transaction;
 
 import java.sql.Timestamp;
+import java.util.Map;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.CurrentTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fundquest.assessment.lib.converters.JSONConverter;
 import com.fundquest.assessment.transaction.enums.TransactionStatus;
 import com.fundquest.assessment.transaction.enums.TransactionType;
 import com.fundquest.assessment.user.User;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -46,6 +52,15 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private TransactionStatus status;
 
+    @Column(name = "meta")
+    @Convert(converter = JSONConverter.class)
+    private Map<String, Object> meta;
+
+    @CreationTimestamp
     @Column(name = "created_at")
     private Timestamp createdAt;
+
+    public Float getSignedAmount() {
+        return type == TransactionType.DEBIT ? -1 * amount : amount;
+    }
 }

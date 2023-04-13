@@ -2,6 +2,9 @@ package com.fundquest.assessment.user;
 
 import java.sql.Timestamp;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -33,9 +36,11 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @CreationTimestamp
     @Column(name = "created_at")
     private Timestamp createdAt;
 
+    @UpdateTimestamp
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
