@@ -1,7 +1,10 @@
 package com.fundquest.assessment.wallet;
 
+import java.util.List;
+
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.fundquest.assessment.transaction.Transaction;
@@ -12,6 +15,7 @@ import com.fundquest.assessment.transaction.helpers.CreateTransactionRequestDAO;
 import com.fundquest.assessment.wallet.deps.history.WalletBalanceHistory;
 import com.fundquest.assessment.wallet.deps.history.WalletBalanceHistoryRepository;
 import com.fundquest.assessment.wallet.deps.history.enums.WalletBalanceHistoryEvent;
+import com.fundquest.assessment.wallet.helpers.CreateWalletRequestDAO;
 import com.fundquest.assessment.wallet.helpers.TransferRequestDAO;
 
 import jakarta.transaction.Transactional;
@@ -25,6 +29,23 @@ public class WalletService {
     private final WalletBalanceHistoryRepository walletBalanceHistoryRepository;
     private final TransactionService transactionService;
 
+    public Wallet create(CreateWalletRequestDAO request) {
+        return walletRepository.save(
+                Wallet.builder()
+                        .owner(request.getUser())
+                        .type(request.getType())
+                        .balance(request.getInitialBalance())
+                        .build());
+    }
+
+    public Wallet getById(Long id) {
+        return walletRepository.findById(id).orElseThrow();
+    }
+
+    public List<Wallet> getByOwnerId(Long ownerId) {
+        return walletRepository.findByOwnerId(ownerId);
+    }
+
     @Transactional(rollbackOn = { Exception.class })
     public Wallet transfer(TransferRequestDAO request) {
         Wallet sourceWallet = walletRepository.findById(request.getSourceWalletId()).orElseThrow();
@@ -33,6 +54,11 @@ public class WalletService {
         // can this transfer be made?
         if (request.getAmount() > sourceWallet.getBalance())
             throw new ServiceException("Balance in wallet not enough");
+
+        Float newBalanceAfterAction = sourceWallet.getBalance() - request.getAmount();
+        if (newBalanceAfterAction < sourceWallet.getType().getMinimumBalance())
+            throw new ServiceException(
+                    "Transfer cannot be made because your remaining balance will be lower than the minimum balance allowed in this wallet");
 
         // process the sender's side of the transaction
         Transaction senderTransaction = transactionService.create(

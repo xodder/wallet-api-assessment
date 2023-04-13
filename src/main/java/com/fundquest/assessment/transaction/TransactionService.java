@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.fundquest.assessment.transaction.helpers.CreateTransactionRequestDAO;
@@ -17,6 +19,10 @@ public class TransactionService {
 
     private final HttpServletRequest httpServletRequest;
     private final TransactionRepository transactionRepository;
+
+    public Page<Transaction> getByUserId(Long userId, Pageable pageable) {
+        return transactionRepository.findByUserIdOrderByCreatedAtDesc(userId, pageable);
+    }
 
     public Transaction create(CreateTransactionRequestDAO request) {
         return transactionRepository.save(
