@@ -1,13 +1,15 @@
 package com.fundquest.assessment.wallet.deps.type;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Builder
 @Data
-@NoArgsConstructor
 @Entity
 @Table(name = "wallet_types")
 public class WalletType {
@@ -16,7 +18,7 @@ public class WalletType {
     @Column(name = "id")
     private Long id;
 
-    @Column(name ="name")
+    @Column(name = "name")
     private String name;
 
     @Column(name = "minimum_balance")
