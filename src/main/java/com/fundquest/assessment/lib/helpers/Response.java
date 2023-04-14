@@ -1,6 +1,6 @@
 package com.fundquest.assessment.lib.helpers;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.data.domain.Page;
@@ -17,7 +17,7 @@ public class Response {
     private Map<String, Object> body;
 
     public static ResponseEntity<Object> of(Object data) {
-        HashMap<String, Object> result = new HashMap<>();
+        Map<String, Object> result = new LinkedHashMap<>();
         result.put("success", true);
         result.put("data", data);
 
@@ -29,7 +29,7 @@ public class Response {
     }
 
     public static ResponseEntity<Object> of(Exception exception) {
-        HashMap<String, Object> result = new HashMap<>();
+        Map<String, Object> result = new LinkedHashMap<>();
 
         result.put("success", false);
         result.put("message", exception.getMessage());

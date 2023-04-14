@@ -1,6 +1,6 @@
 package com.fundquest.assessment.transaction;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class TransactionService {
     }
 
     private Map<String, Object> buildTransactionMeta(CreateTransactionRequestDTO request) {
-        Map<String, Object> meta = new HashMap<>();
+        Map<String, Object> meta = new LinkedHashMap<>();
 
         meta.put("ip", httpServletRequest.getLocalAddr());
         meta.put("user_agent", httpServletRequest.getHeader("user-agent"));
