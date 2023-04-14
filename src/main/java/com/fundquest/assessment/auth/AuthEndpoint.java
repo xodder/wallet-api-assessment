@@ -20,7 +20,7 @@ public class AuthEndpoint {
     private final AuthService authService;
 
     @PostMapping(path = "/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDTO request) {
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO request) throws Exception {
         return Response.of(authService.login(request));
     }
 

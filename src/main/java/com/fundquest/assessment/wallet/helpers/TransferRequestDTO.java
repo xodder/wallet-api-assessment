@@ -1,10 +1,10 @@
 package com.fundquest.assessment.wallet.helpers;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 
 @Builder
-@Data
+@Value
 public class TransferRequestDTO {
     private Long sourceWalletId;
     private Long targetWalletId;

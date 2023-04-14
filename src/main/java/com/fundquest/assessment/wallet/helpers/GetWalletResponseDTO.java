@@ -2,9 +2,15 @@ package com.fundquest.assessment.wallet.helpers;
 
 import com.fundquest.assessment.wallet.Wallet;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Value
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class GetWalletResponseDTO {
     private Wallet wallet;
 }

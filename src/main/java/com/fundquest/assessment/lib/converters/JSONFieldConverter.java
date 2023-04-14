@@ -9,7 +9,7 @@ import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
 @Converter(autoApply = true)
-public class JSONConverter implements AttributeConverter<Object, String> {
+public class JSONFieldConverter implements AttributeConverter<Object, String> {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override

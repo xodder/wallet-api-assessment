@@ -3,11 +3,15 @@ package com.fundquest.assessment.auth.helpers;
 
 import com.fundquest.assessment.user.User;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Builder
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class RegisterResponseDTO {
     public User user;
     public String token;

@@ -6,7 +6,7 @@ import java.util.Map;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fundquest.assessment.lib.converters.JSONConverter;
+import com.fundquest.assessment.lib.converters.JSONFieldConverter;
 import com.fundquest.assessment.transaction.enums.TransactionStatus;
 import com.fundquest.assessment.transaction.enums.TransactionType;
 import com.fundquest.assessment.user.User;
@@ -18,6 +18,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -35,7 +36,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "transactions")
 public class Transaction {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -56,7 +57,7 @@ public class Transaction {
     private TransactionStatus status;
 
     @Column(name = "meta")
-    @Convert(converter = JSONConverter.class)
+    @Convert(converter = JSONFieldConverter.class)
     private Map<String, Object> meta;
 
     @CreationTimestamp
