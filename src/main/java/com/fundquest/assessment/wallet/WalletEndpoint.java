@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fundquest.assessment.wallet.deps.history.WalletBalanceHistory;
 import com.fundquest.assessment.wallet.deps.history.WalletBalanceHistoryService;
+import com.fundquest.assessment.wallet.helpers.CreateWalletRequestDAO;
 import com.fundquest.assessment.wallet.helpers.TransferRequestDAO;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping(path = "/wallets")
+@RequestMapping(path = "/v1/wallets")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class WalletEndpoint {
     private static final String DEFAULT_PAGINATION_PAGE = "0";
@@ -39,6 +40,11 @@ public class WalletEndpoint {
     @GetMapping(path = "/{id}")
     public ResponseEntity<Wallet> getById(@PathVariable(name = "id", required = true) Long id) {
         return ResponseEntity.ofNullable(walletService.getById(id));
+    }
+
+    @PostMapping(path = "")
+    public ResponseEntity<Wallet> createWallet(@RequestBody CreateWalletRequestDAO request) {
+        return ResponseEntity.ofNullable(walletService.create(request));
     }
 
     @GetMapping(path = "/{id}/history")
