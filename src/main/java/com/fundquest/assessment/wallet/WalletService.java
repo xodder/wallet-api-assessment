@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.fundquest.assessment.transaction.Transaction;
@@ -44,6 +45,10 @@ public class WalletService {
 
     public List<Wallet> getByOwnerId(Long ownerId) {
         return walletRepository.findByOwnerId(ownerId);
+    }
+
+    public Page<Wallet> getAll(Pageable pageable) {
+        return walletRepository.findAll(pageable);
     }
 
     @Transactional(rollbackOn = { Exception.class })

@@ -28,4 +28,8 @@ public class UserService {
                         .build());
     }
 
+    public User getById(Long id) {
+        return userRepository.findById(id).orElseThrow();
+    }
+
 }
