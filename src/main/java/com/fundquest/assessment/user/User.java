@@ -1,8 +1,7 @@
 package com.fundquest.assessment.user;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,20 +16,24 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fundquest.assessment.user.deps.role.Role;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Singular;
 
 @Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
@@ -57,11 +60,11 @@ public class User implements UserDetails {
 
     @CreationTimestamp
     @Column(name = "created_at")
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at")
-    private Timestamp updatedAt;
+    private LocalDateTime updatedAt;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

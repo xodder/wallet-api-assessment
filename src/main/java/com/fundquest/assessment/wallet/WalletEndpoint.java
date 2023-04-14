@@ -31,7 +31,7 @@ public class WalletEndpoint {
     private final WalletBalanceHistoryService walletBalanceHistoryService;
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping(path = "/")
+    @GetMapping(path = "")
     public ResponseEntity<?> getAll(
             @RequestParam(name = "page", defaultValue = DEFAULT_PAGINATION_PAGE) Integer page,
             @RequestParam(name = "limit", defaultValue = DEFAULT_PAGINATION_LIMIT) Integer limit) {

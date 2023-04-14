@@ -6,10 +6,8 @@ import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.fundquest.assessment.lib.exception.PlatformException;
 import com.fundquest.assessment.transaction.Transaction;
 import com.fundquest.assessment.transaction.TransactionService;
 import com.fundquest.assessment.transaction.enums.TransactionStatus;
@@ -43,8 +41,10 @@ public class WalletService {
 
     public Wallet getById(Long id) throws Exception {
         return walletRepository.findById(id)
-                .orElseThrow(() -> PlatformException.builder().status(HttpStatus.NOT_FOUND).metaEntry("fields", "hello")
-                        .build());
+                .orElseThrow(() -> new Exception("Wallet not found")
+                // PlatformException.builder().status(HttpStatus.NOT_FOUND).metaEntry("fields",
+                // "hello") .build()
+                );
     }
 
     public List<Wallet> getByOwnerId(Long ownerId) {

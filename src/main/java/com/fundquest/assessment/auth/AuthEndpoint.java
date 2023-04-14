@@ -19,12 +19,12 @@ import lombok.RequiredArgsConstructor;
 public class AuthEndpoint {
     private final AuthService authService;
 
-    @PostMapping(path = "login")
+    @PostMapping(path = "/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO request) {
         return Response.of(authService.login(request));
     }
 
-    @PostMapping(path = "register")
+    @PostMapping(path = "/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequestDTO request) throws Exception {
         return Response.of(authService.register(request));
     }

@@ -10,19 +10,19 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.fundquest.assessment.lib.security.jwt.JwtUtils;
 import com.fundquest.assessment.user.UserService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthTokenFilter extends OncePerRequestFilter {
-    private final JwtUtils jwtUtils;
-    private final UserService userService;
+    @Autowired
+    private JwtUtils jwtUtils;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
