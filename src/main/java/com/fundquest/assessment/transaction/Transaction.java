@@ -1,6 +1,6 @@
 package com.fundquest.assessment.transaction;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -61,7 +61,7 @@ public class Transaction {
 
     @CreationTimestamp
     @Column(name = "created_at")
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
 
     public Float getSignedAmount() {
         return type == TransactionType.DEBIT ? -1 * amount : amount;

@@ -1,6 +1,6 @@
 package com.fundquest.assessment.wallet.deps.history;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -8,7 +8,17 @@ import com.fundquest.assessment.transaction.Transaction;
 import com.fundquest.assessment.wallet.Wallet;
 import com.fundquest.assessment.wallet.deps.history.enums.WalletBalanceHistoryEvent;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -47,6 +57,6 @@ public class WalletBalanceHistory {
 
     @CreationTimestamp
     @Column(name = "recorded_at")
-    private Timestamp recordedAt;
+    private LocalDateTime recordedAt;
 
 }
