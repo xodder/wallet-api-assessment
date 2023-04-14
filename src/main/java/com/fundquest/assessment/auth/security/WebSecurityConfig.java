@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.fundquest.assessment.auth.security.jwt.AuthEntryPointJwt;
+import com.fundquest.assessment.auth.security.jwt.CustomAuthenticationEntryPoint;
 import com.fundquest.assessment.auth.security.jwt.AuthTokenFilter;
 import com.fundquest.assessment.user.UserService;
 
@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 public class WebSecurityConfig {
 
     private final UserService userService;
-    private final AuthEntryPointJwt unauthorizedHandler;
+    private final CustomAuthenticationEntryPoint unauthorizedHandler;
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {

@@ -54,7 +54,6 @@ public class JwtUtils {
     }
 
     private Key getSignInKey() {
-        log.info("{}", jwtSecret);
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 

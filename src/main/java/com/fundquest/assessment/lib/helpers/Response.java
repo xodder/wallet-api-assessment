@@ -7,33 +7,64 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import lombok.Value;
+import lombok.Builder;
+import lombok.Data;
 
-@Value
+@Builder
+@Data
 public class Response {
     private Boolean success;
     private String message;
     private HttpStatus status;
-    private Map<String, Object> body;
+    private Object data;
+
+    public ResponseEntity<Object> entity() {
+        if (status == null)
+            setStatus(HttpStatus.OK);
+
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("success", success);
+
+        if (message != null) {
+            body.put("message", message);
+        }
+
+        body.put("data", data);
+
+        return ResponseEntity.status(status.value()).body(body);
+    }
 
     public static ResponseEntity<Object> of(Object data) {
-        Map<String, Object> result = new LinkedHashMap<>();
-        result.put("success", true);
-        result.put("data", data);
-
-        return ResponseEntity.ok(result);
+        return Response.builder()
+                .success(true)
+                .data(data)
+                .status(HttpStatus.OK)
+                .build()
+                .entity();
     }
 
     public static ResponseEntity<Object> of(Page<?> data) {
-        return of(PaginatedResult.from("entries", data));
+        return Response.of(PaginatedResult.from("entries", data));
     }
 
     public static ResponseEntity<Object> of(Exception exception) {
-        Map<String, Object> result = new LinkedHashMap<>();
+        return Response.from(exception).entity();
+    }
 
-        result.put("success", false);
-        result.put("message", exception.getMessage());
+    public static ResponseEntity<Object> of(Exception exception, HttpStatus status) {
+        return Response.from(exception, status).entity();
+    }
 
-        return ResponseEntity.ok(result);
+    public static Response from(Exception exception) {
+        return Response.from(exception, HttpStatus.BAD_REQUEST);
+    }
+
+    public static Response from(Exception exception, HttpStatus status) {
+        return Response.builder()
+                .message(exception.getMessage())
+                .success(false)
+                .status(status)
+                .data(null)
+                .build();
     }
 }
