@@ -1,7 +1,6 @@
 package com.fundquest.assessment.wallet;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,10 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fundquest.assessment.wallet.deps.history.WalletBalanceHistory;
+import com.fundquest.assessment.lib.helpers.Response;
 import com.fundquest.assessment.wallet.deps.history.WalletBalanceHistoryService;
-import com.fundquest.assessment.wallet.helpers.CreateWalletRequestDAO;
-import com.fundquest.assessment.wallet.helpers.TransferRequestDAO;
+import com.fundquest.assessment.wallet.helpers.CreateWalletRequestDTO;
+import com.fundquest.assessment.wallet.helpers.GetWalletResponseDTO;
+import com.fundquest.assessment.wallet.helpers.TransferRequestDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,36 +30,35 @@ public class WalletEndpoint {
     private final WalletBalanceHistoryService walletBalanceHistoryService;
 
     @GetMapping(path = "/")
-    public ResponseEntity<Page<Wallet>> getAll(
+    public ResponseEntity<?> getAll(
             @RequestParam(name = "page", defaultValue = DEFAULT_PAGINATION_PAGE) Integer page,
             @RequestParam(name = "limit", defaultValue = DEFAULT_PAGINATION_LIMIT) Integer limit) {
-
-        return ResponseEntity.ofNullable(walletService.getAll(PageRequest.of(page, limit)));
+        return Response.of(walletService.getAll(PageRequest.of(page, limit)));
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Wallet> getById(@PathVariable(name = "id", required = true) Long id) {
-        return ResponseEntity.ofNullable(walletService.getById(id));
+    public ResponseEntity<?> getById(@PathVariable(name = "id", required = true) Long id)
+            throws Exception {
+        return Response.of(new GetWalletResponseDTO(walletService.getById(id)));
     }
 
     @PostMapping(path = "")
-    public ResponseEntity<Wallet> createWallet(@RequestBody CreateWalletRequestDAO request) {
-        return ResponseEntity.ofNullable(walletService.create(request));
+    public ResponseEntity<?> createWallet(@RequestBody CreateWalletRequestDTO request) {
+        return Response.of(new GetWalletResponseDTO(walletService.create(request)));
     }
 
     @GetMapping(path = "/{id}/history")
-    public ResponseEntity<Page<WalletBalanceHistory>> getWalletBalanceHistory(
+    public ResponseEntity<?> getWalletBalanceHistory(
             @PathVariable(name = "id", required = true) Long walletId,
             @RequestParam(name = "page", defaultValue = DEFAULT_PAGINATION_PAGE) Integer page,
             @RequestParam(name = "limit", defaultValue = DEFAULT_PAGINATION_LIMIT) Integer limit) {
 
-        return ResponseEntity
-                .ofNullable(walletBalanceHistoryService.getByWalletId(walletId, PageRequest.of(page, limit)));
+        return Response.of(walletBalanceHistoryService.getByWalletId(walletId, PageRequest.of(page, limit)));
     }
 
     @PostMapping(path = "transfer") // could have been "{id}/transfer"
-    public ResponseEntity<Wallet> performTransfer(@RequestBody TransferRequestDAO request) {
-        return ResponseEntity.ofNullable(walletService.transfer(request));
+    public ResponseEntity<?> performTransfer(@RequestBody TransferRequestDTO request) {
+        return Response.of(new GetWalletResponseDTO(walletService.transfer(request)));
     }
 
 }

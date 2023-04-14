@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Builder
 @Data
-public class TransferRequestDAO {
+public class TransferRequestDTO {
     private Long sourceWalletId;
     private Long targetWalletId;
     private Float amount;

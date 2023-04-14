@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.fundquest.assessment.transaction.helpers.CreateTransactionRequestDAO;
+import com.fundquest.assessment.transaction.helpers.CreateTransactionRequestDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class TransactionService {
         return transactionRepository.findByUserIdOrderByCreatedAtDesc(userId, pageable);
     }
 
-    public Transaction create(CreateTransactionRequestDAO request) {
+    public Transaction create(CreateTransactionRequestDTO request) {
         return transactionRepository.save(
                 Transaction.builder()
                         .user(request.getUser())
@@ -35,7 +35,7 @@ public class TransactionService {
                         .build());
     }
 
-    private Map<String, Object> buildTransactionMeta(CreateTransactionRequestDAO request) {
+    private Map<String, Object> buildTransactionMeta(CreateTransactionRequestDTO request) {
         Map<String, Object> meta = new HashMap<>();
 
         meta.put("ip", httpServletRequest.getLocalAddr());

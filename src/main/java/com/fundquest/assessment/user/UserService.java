@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import com.fundquest.assessment.user.helpers.UserCreateRequestDAO;
+import com.fundquest.assessment.user.helpers.UserCreateRequestDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +19,7 @@ public class UserService {
         return userRepository.findAll(request);
     }
 
-    public User create(UserCreateRequestDAO request) {
+    public User create(UserCreateRequestDTO request) {
         return userRepository.save(
                 User.builder()
                         .name(request.getName())

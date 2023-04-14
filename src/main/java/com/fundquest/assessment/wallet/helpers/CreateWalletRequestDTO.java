@@ -8,7 +8,7 @@ import lombok.Value;
 
 @Builder
 @Value
-public class CreateWalletRequestDAO {
+public class CreateWalletRequestDTO {
     private User user;
     private WalletType type;
     private Float initialBalance;

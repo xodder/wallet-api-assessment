@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 import java.util.Map;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.CurrentTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fundquest.assessment.lib.converters.JSONConverter;

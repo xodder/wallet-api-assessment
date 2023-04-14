@@ -9,7 +9,7 @@ import lombok.Value;
 
 @Builder
 @Value
-public class CreateTransactionRequestDAO {
+public class CreateTransactionRequestDTO {
     private User user;
     private TransactionType type;
     private Float amount;

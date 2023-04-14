@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fundquest.assessment.lib.helpers.Response;
 import com.fundquest.assessment.transaction.Transaction;
 import com.fundquest.assessment.transaction.TransactionService;
 import com.fundquest.assessment.wallet.Wallet;
@@ -31,28 +32,28 @@ public class UserEndpoint {
     private final TransactionService transactionService;
 
     @GetMapping(path = "")
-    public ResponseEntity<Page<User>> getAll(
+    public ResponseEntity<?> getAll(
             @RequestParam(name = "page", defaultValue = DEFAULT_PAGINATION_PAGE) Integer page,
             @RequestParam(name = "limit", defaultValue = DEFAULT_PAGINATION_LIMIT) Integer limit) {
-        return ResponseEntity.ofNullable(userService.getAll(PageRequest.of(page, limit)));
+        return Response.of(userService.getAll(PageRequest.of(page, limit)));
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<User> getById(@PathVariable(name = "id") Long id) {
-        return ResponseEntity.ofNullable(userService.getById(id));
+    public ResponseEntity<?> getById(@PathVariable(name = "id") Long id) {
+        return Response.of(userService.getById(id));
     }
 
     @GetMapping(path = "/{id}/wallets")
-    public ResponseEntity<List<Wallet>> getUserWallets(@PathVariable(name = "id") Long userId) {
-        return ResponseEntity.ofNullable(walletService.getByOwnerId(userId));
+    public ResponseEntity<?> getUserWallets(@PathVariable(name = "id") Long userId) {
+        return Response.of(walletService.getByOwnerId(userId));
     }
 
     @GetMapping(path = "/{id}/transactions")
-    public ResponseEntity<Page<Transaction>> getUserTransactions(
+    public ResponseEntity<?> getUserTransactions(
             @PathVariable(name = "id") Long userId,
             @RequestParam(name = "page", defaultValue = DEFAULT_PAGINATION_PAGE) Integer page,
             @RequestParam(name = "limit", defaultValue = "30") Integer limit) {
-        return ResponseEntity.ofNullable(transactionService.getByUserId(userId, PageRequest.of(page, limit)));
+        return Response.of(transactionService.getByUserId(userId, PageRequest.of(page, limit)));
     }
 
 }

@@ -6,18 +6,20 @@ import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.fundquest.assessment.lib.exception.PlatformException;
 import com.fundquest.assessment.transaction.Transaction;
 import com.fundquest.assessment.transaction.TransactionService;
 import com.fundquest.assessment.transaction.enums.TransactionStatus;
 import com.fundquest.assessment.transaction.enums.TransactionType;
-import com.fundquest.assessment.transaction.helpers.CreateTransactionRequestDAO;
+import com.fundquest.assessment.transaction.helpers.CreateTransactionRequestDTO;
 import com.fundquest.assessment.wallet.deps.history.WalletBalanceHistory;
 import com.fundquest.assessment.wallet.deps.history.WalletBalanceHistoryRepository;
 import com.fundquest.assessment.wallet.deps.history.enums.WalletBalanceHistoryEvent;
-import com.fundquest.assessment.wallet.helpers.CreateWalletRequestDAO;
-import com.fundquest.assessment.wallet.helpers.TransferRequestDAO;
+import com.fundquest.assessment.wallet.helpers.CreateWalletRequestDTO;
+import com.fundquest.assessment.wallet.helpers.TransferRequestDTO;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +32,7 @@ public class WalletService {
     private final WalletBalanceHistoryRepository walletBalanceHistoryRepository;
     private final TransactionService transactionService;
 
-    public Wallet create(CreateWalletRequestDAO request) {
+    public Wallet create(CreateWalletRequestDTO request) {
         return walletRepository.save(
                 Wallet.builder()
                         .owner(request.getUser())
@@ -39,8 +41,10 @@ public class WalletService {
                         .build());
     }
 
-    public Wallet getById(Long id) {
-        return walletRepository.findById(id).orElseThrow();
+    public Wallet getById(Long id) throws Exception {
+        return walletRepository.findById(id)
+                .orElseThrow(() -> PlatformException.builder().status(HttpStatus.NOT_FOUND).metaEntry("fields", "hello")
+                        .build());
     }
 
     public List<Wallet> getByOwnerId(Long ownerId) {
@@ -52,7 +56,7 @@ public class WalletService {
     }
 
     @Transactional(rollbackOn = { Exception.class })
-    public Wallet transfer(TransferRequestDAO request) {
+    public Wallet transfer(TransferRequestDTO request) {
         Wallet sourceWallet = walletRepository.findById(request.getSourceWalletId()).orElseThrow();
         Wallet targetWallet = walletRepository.findById(request.getTargetWalletId()).orElseThrow();
 
@@ -67,7 +71,7 @@ public class WalletService {
 
         // process the sender's side of the transaction
         Transaction senderTransaction = transactionService.create(
-                CreateTransactionRequestDAO.builder()
+                CreateTransactionRequestDTO.builder()
                         .user(sourceWallet.getOwner())
                         .type(TransactionType.DEBIT)
                         .amount(request.getAmount())
@@ -77,7 +81,7 @@ public class WalletService {
 
         // process the receiver's side of the transaction
         Transaction receiverTransaction = transactionService.create(
-                CreateTransactionRequestDAO.builder()
+                CreateTransactionRequestDTO.builder()
                         .user(targetWallet.getOwner())
                         .type(TransactionType.CREDIT)
                         .amount(request.getAmount())
