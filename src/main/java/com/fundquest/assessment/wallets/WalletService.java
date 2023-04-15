@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.fundquest.assessment.deposits.Deposit;
 import com.fundquest.assessment.lib.exception.PlatformException;
 import com.fundquest.assessment.lib.helpers.HashMapBuilder;
 import com.fundquest.assessment.transactions.Transaction;
@@ -76,6 +77,26 @@ public class WalletService {
                         .balanceBefore(wallet.getBalance())
                         .balanceAfter(newBalance)
                         .event(WalletBalanceHistoryEvent.of(transfer.getDirection()))
+                        .build());
+
+        // update wallet's balance
+        wallet.setBalance(newBalance);
+
+        return walletRepository.save(wallet);
+    }
+
+    public Wallet applyDepositTo(Wallet wallet, Deposit deposit) {
+        Transaction transaction = deposit.getTransaction();
+        Double newBalance = wallet.getBalance() + transaction.getSignedAmount();
+
+        // add balance history record
+        walletBalanceHistoryRepository.save(
+                WalletBalanceHistory.builder()
+                        .transaction(transaction)
+                        .wallet(wallet)
+                        .balanceBefore(wallet.getBalance())
+                        .balanceAfter(newBalance)
+                        .event(WalletBalanceHistoryEvent.DEPOSIT)
                         .build());
 
         // update wallet's balance

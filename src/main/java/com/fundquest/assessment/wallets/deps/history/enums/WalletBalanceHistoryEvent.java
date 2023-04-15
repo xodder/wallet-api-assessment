@@ -6,7 +6,7 @@ import com.fundquest.assessment.transactions.enums.TransactionType;
 import com.fundquest.assessment.transfers.enums.TransferDirection;
 
 public enum WalletBalanceHistoryEvent {
-    TRANSFER_IN, TRANSFER_OUT;
+    TRANSFER_IN, TRANSFER_OUT, DEPOSIT;
 
     public static WalletBalanceHistoryEvent of(TransactionType transactionType) {
         switch (transactionType) {
