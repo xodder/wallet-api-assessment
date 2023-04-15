@@ -24,13 +24,13 @@ public class WalletTypeService {
     public WalletType getById(Long id) throws Exception {
         return walletTypeRepository.findById(id)
                 .orElseThrow(() -> new PlatformException("Wallet type does not exist")
-                        .setStatus(HttpStatus.NOT_FOUND));
+                        .withStatus(HttpStatus.NOT_FOUND));
     }
 
     public WalletType create(CreateWalletTypeRequestDTO request) throws Exception {
         if (walletTypeRepository.existsByNameIgnoreCase(request.getName())) {
             throw new PlatformException("Name already taken")
-                    .setStatus(HttpStatus.BAD_REQUEST)
+                    .withStatus(HttpStatus.BAD_REQUEST)
                     .withMetaEntry("fields", new HashMapBuilder<>().entry("name", "Name is already in use").build());
         }
 

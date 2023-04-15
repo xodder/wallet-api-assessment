@@ -41,24 +41,25 @@ public class TransferService {
 
     public Transfer getById(Long id) throws Exception {
         return transferRepository.findById(id)
-                .orElseThrow(() -> new PlatformException("Transfer record not found").setStatus(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new PlatformException("Transfer record not found").withStatus(HttpStatus.NOT_FOUND));
     }
 
     @Transactional(rollbackOn = { Exception.class })
     public TransferRequestDTO transfer(User issuer, TransferRequestDTO request) throws Exception {
         Wallet sourceWallet = walletService.findById(request.getSourceWalletId()).orElseThrow(
-                () -> new PlatformException("Source wallet does not exist").setStatus(HttpStatus.NOT_FOUND));
+                () -> new PlatformException("Source wallet does not exist").withStatus(HttpStatus.NOT_FOUND));
         Wallet targetWallet = walletService.findById(request.getTargetWalletId()).orElseThrow(
-                () -> new PlatformException("Target wallet does not exist").setStatus(HttpStatus.NOT_FOUND));
+                () -> new PlatformException("Target wallet does not exist").withStatus(HttpStatus.NOT_FOUND));
 
         // is the right person the one making this request
         if (issuer.getId() != sourceWallet.getOwner().getId()) {
-            throw new PlatformException("You cannot perform this action").setStatus(HttpStatus.FORBIDDEN);
+            throw new PlatformException("You cannot perform this action").withStatus(HttpStatus.FORBIDDEN);
         }
 
         // can this transfer be made?
         if (request.getAmount() > sourceWallet.getBalance())
-            throw new PlatformException("Balance in wallet not enough").setStatus(HttpStatus.BAD_REQUEST)
+            throw new PlatformException("Balance in wallet not enough")
+                    .withStatus(HttpStatus.BAD_REQUEST)
                     .withMetaEntry("fields",
                             new HashMapBuilder<>().entry("amount", "Amount is greater then allowed").build());
 
@@ -66,7 +67,8 @@ public class TransferService {
         if (newBalanceAfterAction < sourceWallet.getType().getMinimumBalance())
             throw new PlatformException(
                     "Transfer cannot be made because your remaining balance will be lower than the minimum balance allowed in this wallet")
-                    .setStatus(HttpStatus.BAD_REQUEST).withMetaEntry("fields",
+                    .withStatus(HttpStatus.BAD_REQUEST)
+                    .withMetaEntry("fields",
                             new HashMapBuilder<>().entry("amount", "Amount is greater than allowed").build());
 
         // create outward transfer record

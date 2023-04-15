@@ -39,17 +39,17 @@ public class DepositService {
 
     public Deposit getById(Long id) throws Exception {
         return depositRepository.findById(id)
-                .orElseThrow(() -> new PlatformException("Deposit record not found").setStatus(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new PlatformException("Deposit record not found").withStatus(HttpStatus.NOT_FOUND));
     }
 
     @Transactional(rollbackOn = { Exception.class })
     public Deposit deposit(User issuer, DepositRequestDTO request) throws Exception {
         Wallet targetWallet = walletService.findById(request.getTargetWalletId()).orElseThrow(
-                () -> new PlatformException("Target wallet does not exist").setStatus(HttpStatus.NOT_FOUND));
+                () -> new PlatformException("Target wallet does not exist").withStatus(HttpStatus.NOT_FOUND));
 
         // is the right person the one making this request
         if (issuer.getId() != targetWallet.getOwner().getId()) {
-            throw new PlatformException("You cannot perform this action").setStatus(HttpStatus.FORBIDDEN);
+            throw new PlatformException("You cannot perform this action").withStatus(HttpStatus.FORBIDDEN);
         }
 
         // create deposit record

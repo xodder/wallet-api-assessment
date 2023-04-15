@@ -35,7 +35,8 @@ public class WalletService {
     public Wallet create(User issuer, CreateWalletRequestDTO request) throws Exception {
         WalletType walletType = walletTypeRepository.findById(request.getWalletTypeId())
                 .orElseThrow(() -> new PlatformException("Wallet type not found")
-                        .setStatus(HttpStatus.NOT_FOUND).withMetaEntry("fields",
+                        .withStatus(HttpStatus.NOT_FOUND)
+                        .withMetaEntry("fields",
                                 new HashMapBuilder<>()
                                         .entry("wallet_type_id", "A wallet type with this id does not exist")
                                         .build()));
@@ -50,7 +51,7 @@ public class WalletService {
 
     public Wallet getById(Long id) throws Exception {
         return walletRepository.findById(id)
-                .orElseThrow(() -> new PlatformException("Wallet not found").setStatus(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new PlatformException("Wallet not found").withStatus(HttpStatus.NOT_FOUND));
     }
 
     public Optional<Wallet> findById(Long id) {

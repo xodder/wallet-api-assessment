@@ -40,7 +40,7 @@ public class UserService implements UserDetailsService {
     public User getById(Long id) throws Exception {
         return userRepository.findById(id).orElseThrow(
                 () -> new PlatformException("User not found")
-                        .setStatus(HttpStatus.NOT_FOUND));
+                        .withStatus(HttpStatus.NOT_FOUND));
     }
 
     public Boolean existsByEmail(String email) {

@@ -23,6 +23,11 @@ public class PlatformException extends Exception {
         super(message);
     }
 
+    public PlatformException withStatus(HttpStatus status) {
+        this.status = status;
+        return this;
+    }
+
     public PlatformException withMetaEntry(String key, Object value) {
         meta.put(key, value);
         return this;
