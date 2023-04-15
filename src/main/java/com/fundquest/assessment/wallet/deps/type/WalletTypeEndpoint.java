@@ -13,6 +13,7 @@ import com.fundquest.assessment.lib.helpers.Response;
 import com.fundquest.assessment.wallet.deps.type.helpers.CreateWalletTypeRequestDTO;
 import com.fundquest.assessment.wallet.deps.type.helpers.FetchWalletTypeResponseDTO;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -32,7 +33,7 @@ public class WalletTypeEndpoint {
     }
 
     @PostMapping(path = "")
-    public ResponseEntity<?> create(@RequestBody CreateWalletTypeRequestDTO request) throws Exception {
+    public ResponseEntity<?> create(@Valid @RequestBody CreateWalletTypeRequestDTO request) throws Exception {
         return Response.of(new FetchWalletTypeResponseDTO(walletTypeService.create(request)));
     }
 

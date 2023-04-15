@@ -46,14 +46,13 @@ public class WalletService {
                         .build());
     }
 
+    @Transactional
     public Wallet getById(Long id) throws Exception {
         return walletRepository.findById(id)
-                .orElseThrow(() -> new Exception("Wallet not found")
-                // PlatformException.builder().status(HttpStatus.NOT_FOUND).metaEntry("fields",
-                // "hello") .build()
-                );
+                .orElseThrow(() -> new Exception("Wallet not found"));
     }
 
+    @Transactional
     public List<Wallet> getByOwnerId(Long ownerId) {
         return walletRepository.findByOwnerId(ownerId);
     }
@@ -80,6 +79,7 @@ public class WalletService {
         Transaction senderTransaction = transactionService.create(
                 CreateTransactionRequestDTO.builder()
                         .user(sourceWallet.getOwner())
+                        .wallet(sourceWallet)
                         .type(TransactionType.DEBIT)
                         .amount(request.getAmount())
                         .status(TransactionStatus.SUCCESSFUL)
@@ -90,6 +90,7 @@ public class WalletService {
         Transaction receiverTransaction = transactionService.create(
                 CreateTransactionRequestDTO.builder()
                         .user(targetWallet.getOwner())
+                        .wallet(targetWallet)
                         .type(TransactionType.CREDIT)
                         .amount(request.getAmount())
                         .status(TransactionStatus.SUCCESSFUL)

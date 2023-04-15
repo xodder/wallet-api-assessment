@@ -33,7 +33,7 @@ public class UserEndpoint {
     public ResponseEntity<?> getAll(
             @RequestParam(name = "page", defaultValue = DEFAULT_PAGINATION_PAGE) Integer page,
             @RequestParam(name = "limit", defaultValue = DEFAULT_PAGINATION_LIMIT) Integer limit) {
-        return Response.named(userService.getAll(PageRequest.of(page, limit)), "transactions");
+        return Response.named(userService.getAll(PageRequest.of(page, limit)), "users");
     }
 
     @GetMapping(path = "/{id}")
@@ -55,5 +55,6 @@ public class UserEndpoint {
             @RequestParam(name = "page", defaultValue = DEFAULT_PAGINATION_PAGE) Integer page,
             @RequestParam(name = "limit", defaultValue = "30") Integer limit) {
         return Response.named(transactionService.getByUserId(userId, PageRequest.of(page, limit)), "transactions");
+
     }
 }

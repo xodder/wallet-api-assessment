@@ -1,20 +1,20 @@
 package com.fundquest.assessment.wallet.helpers;
 
-import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Value;
 
 @Builder
 @Value
 public class TransferRequestDTO {
-    @Nonnull
+    @NotNull
     private Long sourceWalletId;
 
-    @Nonnull
+    @NotNull
     private Long targetWalletId;
 
-    @Nonnull
+    @NotNull
     @DecimalMin("1.0")
     private Double amount;
 }

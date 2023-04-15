@@ -1,19 +1,24 @@
 package com.fundquest.assessment.user;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fundquest.assessment.transaction.Transaction;
 import com.fundquest.assessment.user.deps.role.Role;
+import com.fundquest.assessment.wallet.Wallet;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,17 +29,23 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Singular;
+import lombok.ToString;
+import lombok.extern.jackson.Jacksonized;
 
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Jacksonized
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
@@ -60,12 +71,28 @@ public class User implements UserDetails {
     private Set<Role> roles;
 
     @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private Timestamp createdAt;
 
     @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private Timestamp updatedAt;
+
+    @ToString.Exclude
+    @JsonIgnore
+    @JsonBackReference
+    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
+    @NotFound(action = NotFoundAction.IGNORE)
+    private List<Wallet> wallets;
+
+    @ToString.Exclude
+    @JsonIgnore
+    @JsonBackReference
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @NotFound(action = NotFoundAction.IGNORE)
+    private List<Transaction> transactions;
 
     @JsonIgnore
     @Override

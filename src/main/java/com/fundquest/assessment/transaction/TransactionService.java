@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.fundquest.assessment.transaction.helpers.CreateTransactionRequestDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -20,6 +21,7 @@ public class TransactionService {
     private final HttpServletRequest httpServletRequest;
     private final TransactionRepository transactionRepository;
 
+    @Transactional(rollbackOn = { Exception.class })
     public Page<Transaction> getByUserId(Long userId, Pageable pageable) {
         return transactionRepository.findByUserIdOrderByCreatedAtDesc(userId, pageable);
     }
@@ -28,6 +30,7 @@ public class TransactionService {
         return transactionRepository.save(
                 Transaction.builder()
                         .user(request.getUser())
+                        .wallet(request.getWallet())
                         .type(request.getType())
                         .amount(request.getAmount())
                         .status(request.getStatus())

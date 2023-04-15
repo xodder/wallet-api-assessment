@@ -16,7 +16,7 @@ import org.springframework.web.context.request.WebRequest;
 import com.fundquest.assessment.lib.helpers.Response;
 
 @ControllerAdvice
-public class SharedControllerAdvice {
+public class PlatformControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

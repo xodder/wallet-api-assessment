@@ -1,11 +1,19 @@
 package com.fundquest.assessment.wallet;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fundquest.assessment.transaction.Transaction;
 import com.fundquest.assessment.user.User;
+import com.fundquest.assessment.wallet.deps.history.WalletBalanceHistory;
 import com.fundquest.assessment.wallet.deps.type.WalletType;
 
 import jakarta.persistence.Column;
@@ -16,11 +24,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Builder
 @Data
@@ -35,10 +47,12 @@ public class Wallet {
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "owner_id", nullable = false)
+    @JsonManagedReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id")
     private User owner;
 
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "type_id", nullable = false)
     private WalletType type;
@@ -47,11 +61,27 @@ public class Wallet {
     private Double balance;
 
     @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private Timestamp createdAt;
 
     @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private Timestamp updatedAt;
+
+    @ToString.Exclude
+    @JsonBackReference
+    @JsonIgnore
+    @OneToMany(mappedBy = "wallet", fetch = FetchType.LAZY)
+    @NotFound(action = NotFoundAction.IGNORE)
+    private List<Transaction> transactions;
+
+    @ToString.Exclude
+    @JsonBackReference
+    @JsonIgnore
+    @OneToMany(mappedBy = "wallet", fetch = FetchType.LAZY)
+    @NotFound(action = NotFoundAction.IGNORE)
+    private List<WalletBalanceHistory> balanceHistories;
 
 }

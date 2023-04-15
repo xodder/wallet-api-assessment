@@ -1,16 +1,26 @@
 package com.fundquest.assessment.transaction;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
+import java.util.List;
 import java.util.Map;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fundquest.assessment.lib.converters.JSONFieldConverter;
 import com.fundquest.assessment.transaction.enums.TransactionStatus;
 import com.fundquest.assessment.transaction.enums.TransactionType;
 import com.fundquest.assessment.user.User;
+import com.fundquest.assessment.wallet.Wallet;
+import com.fundquest.assessment.wallet.deps.history.WalletBalanceHistory;
 
+import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -22,11 +32,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Builder
 @Data
@@ -40,10 +54,20 @@ public class Transaction {
     @Column(name = "id")
     private Long id;
 
-    @JsonIgnore
+    // @JsonIgnore
+    @Basic(fetch = FetchType.LAZY)
+    @JsonInclude(value = Include.NON_NULL)
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
+
+    // @JsonIgnore
+    @Basic(fetch = FetchType.LAZY)
+    @JsonManagedReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "wallet_id")
+    private Wallet wallet;
 
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
@@ -61,8 +85,16 @@ public class Transaction {
     private Map<String, Object> meta;
 
     @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private Timestamp createdAt;
+
+    @JsonIgnore
+    @JsonBackReference
+    @ToString.Exclude
+    @OneToMany(mappedBy = "transaction", fetch = FetchType.LAZY)
+    @NotFound(action = NotFoundAction.IGNORE)
+    private List<WalletBalanceHistory> refWalletBalanceHistories;
 
     public Double getSignedAmount() {
         return type == TransactionType.DEBIT ? -1 * amount : amount;
