@@ -12,6 +12,7 @@ import com.fundquest.assessment.transactions.helpers.CreateTransactionRequestDTO
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -26,7 +27,7 @@ public class TransactionService {
         return transactionRepository.findByUserIdOrderByCreatedAtDesc(userId, pageable);
     }
 
-    public Transaction create(CreateTransactionRequestDTO request) {
+    public Transaction create(@Valid CreateTransactionRequestDTO request) {
         return transactionRepository.save(
                 Transaction.builder()
                         .user(request.getUser())

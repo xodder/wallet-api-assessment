@@ -17,7 +17,7 @@ import com.fundquest.assessment.auth.helpers.LoginRequestDTO;
 import com.fundquest.assessment.auth.helpers.LoginResponseDTO;
 import com.fundquest.assessment.auth.helpers.RegisterRequestDTO;
 import com.fundquest.assessment.auth.helpers.RegisterResponseDTO;
-import com.fundquest.assessment.auth.security.jwt.JwtUtils;
+import com.fundquest.assessment.lib.security.jwt.JwtUtils;
 import com.fundquest.assessment.lib.exception.PlatformException;
 import com.fundquest.assessment.lib.helpers.HashMapBuilder;
 import com.fundquest.assessment.users.User;

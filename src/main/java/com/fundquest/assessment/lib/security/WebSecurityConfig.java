@@ -1,4 +1,4 @@
-package com.fundquest.assessment.auth.security;
+package com.fundquest.assessment.lib.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,8 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.fundquest.assessment.auth.security.jwt.CustomAuthenticationEntryPoint;
-import com.fundquest.assessment.auth.security.jwt.AuthTokenFilter;
+import com.fundquest.assessment.lib.security.jwt.CustomAuthenticationEntryPoint;
+import com.fundquest.assessment.lib.security.jwt.AuthTokenFilter;
 import com.fundquest.assessment.users.UserService;
 
 import lombok.RequiredArgsConstructor;

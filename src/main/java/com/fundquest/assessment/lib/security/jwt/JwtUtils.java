@@ -1,4 +1,4 @@
-package com.fundquest.assessment.auth.security.jwt;
+package com.fundquest.assessment.lib.security.jwt;
 
 import java.security.Key;
 import java.util.Date;
