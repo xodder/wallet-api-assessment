@@ -93,12 +93,13 @@ public class TransferService {
     }
 
     private synchronized Transfer create(CreateTransferRequestDTO request) {
+        Boolean isDebit = request.getDirection() == TransferDirection.OUT;
+
         Transaction transaction = transactionService.create(
                 CreateTransactionRequestDTO.builder()
                         .user(request.getUser())
-                        .wallet(request.getSourceWallet())
-                        .type(request.getDirection() == TransferDirection.OUT ? TransactionType.DEBIT
-                                : TransactionType.CREDIT)
+                        .wallet(isDebit ? request.getSourceWallet() : request.getTargetWallet())
+                        .type(isDebit ? TransactionType.DEBIT : TransactionType.CREDIT)
                         .method(TransactionMethod.TRANSFER)
                         .amount(request.getAmount())
                         .status(TransactionStatus.SUCCESSFUL)
