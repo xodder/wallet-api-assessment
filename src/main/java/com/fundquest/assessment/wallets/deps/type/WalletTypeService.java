@@ -31,7 +31,7 @@ public class WalletTypeService {
         if (walletTypeRepository.existsByNameIgnoreCase(request.getName())) {
             throw new PlatformException("Name already taken")
                     .setStatus(HttpStatus.BAD_REQUEST)
-                    .metaEntry("fields", new HashMapBuilder<>().entry("name", "Name is already in use").build());
+                    .withMetaEntry("fields", new HashMapBuilder<>().entry("name", "Name is already in use").build());
         }
 
         return walletTypeRepository.save(

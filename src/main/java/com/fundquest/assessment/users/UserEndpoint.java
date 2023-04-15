@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fundquest.assessment.lib.helpers.Response;
 import com.fundquest.assessment.transactions.TransactionService;
+import com.fundquest.assessment.transfers.TransferService;
 import com.fundquest.assessment.users.helpers.FetchUserResponseDTO;
 import com.fundquest.assessment.wallets.WalletService;
 
@@ -27,6 +28,7 @@ public class UserEndpoint {
     private final UserService userService;
     private final WalletService walletService;
     private final TransactionService transactionService;
+    private final TransferService transferService;
 
     @GetMapping(path = "")
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -55,6 +57,16 @@ public class UserEndpoint {
             @RequestParam(name = "page", defaultValue = DEFAULT_PAGINATION_PAGE) Integer page,
             @RequestParam(name = "limit", defaultValue = "30") Integer limit) {
         return Response.named(transactionService.getByUserId(userId, PageRequest.of(page, limit)), "transactions");
+
+    }
+
+    @GetMapping(path = "/{id}/transfers")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public ResponseEntity<?> getUserTransfers(
+            @PathVariable(name = "id") Long userId,
+            @RequestParam(name = "page", defaultValue = DEFAULT_PAGINATION_PAGE) Integer page,
+            @RequestParam(name = "limit", defaultValue = "30") Integer limit) {
+        return Response.named(transferService.getByUserId(userId, PageRequest.of(page, limit)), "transfers");
 
     }
 }

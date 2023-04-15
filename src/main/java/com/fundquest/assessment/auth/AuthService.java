@@ -54,7 +54,7 @@ public class AuthService {
         if (userService.existsByEmail(request.getEmail())) {
             throw new PlatformException("Email is already in use")
                     .setStatus(HttpStatus.BAD_REQUEST)
-                    .metaEntry("fields", new HashMapBuilder<String, String>()
+                    .withMetaEntry("fields", new HashMapBuilder<String, String>()
                             .entry("email", "Email is already in use")
                             .build());
         }

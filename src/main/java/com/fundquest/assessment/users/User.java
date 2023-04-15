@@ -40,13 +40,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Singular;
 import lombok.ToString;
-import lombok.extern.jackson.Jacksonized;
 
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Jacksonized
 @Entity
 @Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = { "email" }) })
 public class User implements UserDetails {
