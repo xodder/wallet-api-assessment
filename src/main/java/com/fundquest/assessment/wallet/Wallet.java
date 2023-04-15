@@ -44,7 +44,7 @@ public class Wallet {
     private WalletType type;
 
     @Column(name = "balance")
-    private Float balance;
+    private Double balance;
 
     @CreationTimestamp
     @Column(name = "created_at")

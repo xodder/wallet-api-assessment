@@ -50,7 +50,7 @@ public class Transaction {
     private TransactionType type;
 
     @Column(name = "amount")
-    private Float amount;
+    private Double amount;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
@@ -64,7 +64,7 @@ public class Transaction {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    public Float getSignedAmount() {
+    public Double getSignedAmount() {
         return type == TransactionType.DEBIT ? -1 * amount : amount;
     }
 }

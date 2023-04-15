@@ -13,5 +13,5 @@ public class CreateWalletRequestDTO {
     private Long walletTypeId;
 
     @Builder.Default
-    private Float initialBalance = 0.0F;
+    private Double initialBalance = 0.0;
 }

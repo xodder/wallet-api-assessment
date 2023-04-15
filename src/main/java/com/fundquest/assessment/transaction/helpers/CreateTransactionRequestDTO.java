@@ -12,6 +12,6 @@ import lombok.Value;
 public class CreateTransactionRequestDTO {
     private User user;
     private TransactionType type;
-    private Float amount;
+    private Double amount;
     private TransactionStatus status;
 }

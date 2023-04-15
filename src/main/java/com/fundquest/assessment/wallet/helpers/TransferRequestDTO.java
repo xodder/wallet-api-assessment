@@ -16,5 +16,5 @@ public class TransferRequestDTO {
 
     @Nonnull
     @DecimalMin("1.0")
-    private Float amount;
+    private Double amount;
 }

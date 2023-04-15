@@ -71,7 +71,7 @@ public class WalletService {
         if (request.getAmount() > sourceWallet.getBalance())
             throw new ServiceException("Balance in wallet not enough");
 
-        Float newBalanceAfterAction = sourceWallet.getBalance() - request.getAmount();
+        Double newBalanceAfterAction = sourceWallet.getBalance() - request.getAmount();
         if (newBalanceAfterAction < sourceWallet.getType().getMinimumBalance())
             throw new ServiceException(
                     "Transfer cannot be made because your remaining balance will be lower than the minimum balance allowed in this wallet");
@@ -100,7 +100,7 @@ public class WalletService {
     }
 
     private synchronized Wallet addTransactionToWallet(Wallet wallet, Transaction transaction) {
-        Float newBalance = wallet.getBalance() + transaction.getSignedAmount();
+        Double newBalance = wallet.getBalance() + transaction.getSignedAmount();
 
         // add balance history record
         walletBalanceHistoryRepository.save(

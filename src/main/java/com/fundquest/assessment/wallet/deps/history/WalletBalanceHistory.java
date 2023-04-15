@@ -47,10 +47,10 @@ public class WalletBalanceHistory {
     private Transaction transaction;
 
     @Column(name = "balance_before")
-    private Float balanceBefore;
+    private Double balanceBefore;
 
     @Column(name = "balance_after")
-    private Float balanceAfter;
+    private Double balanceAfter;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "event")

@@ -29,8 +29,8 @@ public class WalletType {
     private String name;
 
     @Column(name = "minimum_balance")
-    private Float minimumBalance;
+    private Double minimumBalance;
 
     @Column(name = "monthly_interest_rate")
-    private Float monthlyInterestRate;
+    private Double monthlyInterestRate;
 }

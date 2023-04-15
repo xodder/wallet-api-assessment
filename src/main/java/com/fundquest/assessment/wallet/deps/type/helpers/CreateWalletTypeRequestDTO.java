@@ -13,10 +13,10 @@ public class CreateWalletTypeRequestDTO {
 
     @NotBlank(message = "Minimum balance is required")
     @PositiveOrZero(message = "Minimum balance cannot be less than zero")
-    private Float minimumBalance;
+    private Double minimumBalance;
 
     @NotBlank(message = "Monthly interest rate is required")
     @PositiveOrZero(message = "Monthly interest rate cannot be less than zero")
-    private Float monthlyInterestRate;
+    private Double monthlyInterestRate;
     
 }
