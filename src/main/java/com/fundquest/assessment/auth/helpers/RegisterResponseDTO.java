@@ -1,7 +1,7 @@
 
 package com.fundquest.assessment.auth.helpers;
 
-import com.fundquest.assessment.user.User;
+import com.fundquest.assessment.users.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

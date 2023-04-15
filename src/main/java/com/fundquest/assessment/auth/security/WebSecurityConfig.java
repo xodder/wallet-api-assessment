@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.fundquest.assessment.auth.security.jwt.CustomAuthenticationEntryPoint;
 import com.fundquest.assessment.auth.security.jwt.AuthTokenFilter;
-import com.fundquest.assessment.user.UserService;
+import com.fundquest.assessment.users.UserService;
 
 import lombok.RequiredArgsConstructor;
 

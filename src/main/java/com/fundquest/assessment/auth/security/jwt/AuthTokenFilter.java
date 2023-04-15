@@ -10,7 +10,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.fundquest.assessment.user.UserService;
+import com.fundquest.assessment.users.UserService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

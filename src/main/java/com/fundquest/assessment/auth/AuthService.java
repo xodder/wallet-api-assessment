@@ -20,9 +20,9 @@ import com.fundquest.assessment.auth.helpers.RegisterResponseDTO;
 import com.fundquest.assessment.auth.security.jwt.JwtUtils;
 import com.fundquest.assessment.lib.exception.PlatformException;
 import com.fundquest.assessment.lib.helpers.HashMapBuilder;
-import com.fundquest.assessment.user.User;
-import com.fundquest.assessment.user.UserService;
-import com.fundquest.assessment.user.helpers.CreateUserRequestDTO;
+import com.fundquest.assessment.users.User;
+import com.fundquest.assessment.users.UserService;
+import com.fundquest.assessment.users.helpers.CreateUserRequestDTO;
 
 import lombok.RequiredArgsConstructor;
 

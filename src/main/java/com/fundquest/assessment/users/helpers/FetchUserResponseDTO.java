@@ -1,4 +1,4 @@
-package com.fundquest.assessment.auth.helpers;
+package com.fundquest.assessment.users.helpers;
 
 import com.fundquest.assessment.users.User;
 
@@ -11,7 +11,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginResponseDTO {
+public class FetchUserResponseDTO {
     private User user;
-    private String token;
+
+    public static FetchUserResponseDTO of(User user) {
+        return new FetchUserResponseDTO(user);
+    }
 }
