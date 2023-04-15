@@ -39,7 +39,7 @@ public class DepositService {
 
     public Deposit getById(Long id) throws Exception {
         return depositRepository.findById(id)
-                .orElseThrow(() -> new PlatformException("Transfer record not found").setStatus(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new PlatformException("Deposit record not found").setStatus(HttpStatus.NOT_FOUND));
     }
 
     @Transactional(rollbackOn = { Exception.class })
