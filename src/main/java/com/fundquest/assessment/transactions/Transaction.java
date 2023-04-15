@@ -10,17 +10,15 @@ import org.hibernate.annotations.NotFoundAction;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fundquest.assessment.lib.converters.JSONFieldConverter;
+import com.fundquest.assessment.transactions.enums.TransactionMethod;
 import com.fundquest.assessment.transactions.enums.TransactionStatus;
 import com.fundquest.assessment.transactions.enums.TransactionType;
 import com.fundquest.assessment.users.User;
 import com.fundquest.assessment.wallets.Wallet;
 import com.fundquest.assessment.wallets.deps.history.WalletBalanceHistory;
 
-import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -55,15 +53,12 @@ public class Transaction {
     private Long id;
 
     // @JsonIgnore
-    @Basic(fetch = FetchType.LAZY)
-    @JsonInclude(value = Include.NON_NULL)
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     // @JsonIgnore
-    @Basic(fetch = FetchType.LAZY)
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "wallet_id")
@@ -72,6 +67,10 @@ public class Transaction {
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private TransactionType type;
+
+    @Column(name = "method")
+    @Enumerated(EnumType.STRING)
+    private TransactionMethod method;
 
     @Column(name = "amount")
     private Double amount;

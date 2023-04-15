@@ -10,6 +10,7 @@ import com.fundquest.assessment.lib.exception.PlatformException;
 import com.fundquest.assessment.lib.helpers.HashMapBuilder;
 import com.fundquest.assessment.transactions.Transaction;
 import com.fundquest.assessment.transactions.TransactionService;
+import com.fundquest.assessment.transactions.enums.TransactionMethod;
 import com.fundquest.assessment.transactions.enums.TransactionStatus;
 import com.fundquest.assessment.transactions.enums.TransactionType;
 import com.fundquest.assessment.transactions.helpers.CreateTransactionRequestDTO;
@@ -98,6 +99,7 @@ public class TransferService {
                         .wallet(request.getSourceWallet())
                         .type(request.getDirection() == TransferDirection.OUT ? TransactionType.DEBIT
                                 : TransactionType.CREDIT)
+                        .method(TransactionMethod.TRANSFER)
                         .amount(request.getAmount())
                         .status(TransactionStatus.SUCCESSFUL)
                         .build());

@@ -1,5 +1,6 @@
 package com.fundquest.assessment.transactions.helpers;
 
+import com.fundquest.assessment.transactions.enums.TransactionMethod;
 import com.fundquest.assessment.transactions.enums.TransactionStatus;
 import com.fundquest.assessment.transactions.enums.TransactionType;
 import com.fundquest.assessment.users.User;
@@ -14,6 +15,7 @@ public class CreateTransactionRequestDTO {
     private User user;
     private Wallet wallet;
     private TransactionType type;
+    private TransactionMethod method;
     private Double amount;
     private TransactionStatus status;
 }

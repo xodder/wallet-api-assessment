@@ -1,6 +1,5 @@
 package com.fundquest.assessment.transactions;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +32,7 @@ public class TransactionService {
                         .user(request.getUser())
                         .wallet(request.getWallet())
                         .type(request.getType())
+                        .method(request.getMethod())
                         .amount(request.getAmount())
                         .status(request.getStatus())
                         .meta(buildTransactionMeta(request))
