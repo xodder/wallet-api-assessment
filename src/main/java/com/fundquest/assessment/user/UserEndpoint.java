@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fundquest.assessment.lib.helpers.Response;
 import com.fundquest.assessment.transaction.TransactionService;
+import com.fundquest.assessment.user.helpers.FetchUserResponseDTO;
 import com.fundquest.assessment.wallet.WalletService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,32 +28,32 @@ public class UserEndpoint {
     private final WalletService walletService;
     private final TransactionService transactionService;
 
-    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(path = "")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<?> getAll(
             @RequestParam(name = "page", defaultValue = DEFAULT_PAGINATION_PAGE) Integer page,
             @RequestParam(name = "limit", defaultValue = DEFAULT_PAGINATION_LIMIT) Integer limit) {
-        return Response.of(userService.getAll(PageRequest.of(page, limit)));
+        return Response.named(userService.getAll(PageRequest.of(page, limit)), "transactions");
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(path = "/{id}")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<?> getById(@PathVariable(name = "id") Long id) {
-        return Response.of(userService.getById(id));
+        return Response.of(new FetchUserResponseDTO(userService.getById(id)));
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(path = "/{id}/wallets")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<?> getUserWallets(@PathVariable(name = "id") Long userId) {
-        return Response.of(walletService.getByOwnerId(userId));
+        return Response.named(walletService.getByOwnerId(userId), "wallets");
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(path = "/{id}/transactions")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<?> getUserTransactions(
             @PathVariable(name = "id") Long userId,
             @RequestParam(name = "page", defaultValue = DEFAULT_PAGINATION_PAGE) Integer page,
             @RequestParam(name = "limit", defaultValue = "30") Integer limit) {
-        return Response.of(transactionService.getByUserId(userId, PageRequest.of(page, limit)));
+        return Response.named(transactionService.getByUserId(userId, PageRequest.of(page, limit)), "transactions");
     }
 }

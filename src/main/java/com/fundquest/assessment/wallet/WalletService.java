@@ -13,9 +13,12 @@ import com.fundquest.assessment.transaction.TransactionService;
 import com.fundquest.assessment.transaction.enums.TransactionStatus;
 import com.fundquest.assessment.transaction.enums.TransactionType;
 import com.fundquest.assessment.transaction.helpers.CreateTransactionRequestDTO;
+import com.fundquest.assessment.user.User;
 import com.fundquest.assessment.wallet.deps.history.WalletBalanceHistory;
 import com.fundquest.assessment.wallet.deps.history.WalletBalanceHistoryRepository;
 import com.fundquest.assessment.wallet.deps.history.enums.WalletBalanceHistoryEvent;
+import com.fundquest.assessment.wallet.deps.type.WalletType;
+import com.fundquest.assessment.wallet.deps.type.WalletTypeRepository;
 import com.fundquest.assessment.wallet.helpers.CreateWalletRequestDTO;
 import com.fundquest.assessment.wallet.helpers.TransferRequestDTO;
 
@@ -27,14 +30,18 @@ import lombok.RequiredArgsConstructor;
 public class WalletService {
 
     private final WalletRepository walletRepository;
+    private final WalletTypeRepository walletTypeRepository;
     private final WalletBalanceHistoryRepository walletBalanceHistoryRepository;
     private final TransactionService transactionService;
 
-    public Wallet create(CreateWalletRequestDTO request) {
+    public Wallet create(User issuer, CreateWalletRequestDTO request) throws Exception {
+        WalletType walletType = walletTypeRepository.findById(request.getWalletTypeId())
+                .orElseThrow(() -> new Exception("Wallet type not found"));
+
         return walletRepository.save(
                 Wallet.builder()
-                        .owner(request.getUser())
-                        .type(request.getType())
+                        .owner(issuer)
+                        .type(walletType)
                         .balance(request.getInitialBalance())
                         .build());
     }

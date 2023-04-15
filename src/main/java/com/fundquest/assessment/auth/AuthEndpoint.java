@@ -11,6 +11,7 @@ import com.fundquest.assessment.auth.helpers.LoginRequestDTO;
 import com.fundquest.assessment.auth.helpers.RegisterRequestDTO;
 import com.fundquest.assessment.lib.helpers.Response;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -20,12 +21,12 @@ public class AuthEndpoint {
     private final AuthService authService;
 
     @PostMapping(path = "/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDTO request) throws Exception {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDTO request) throws Exception {
         return Response.of(authService.login(request));
     }
 
     @PostMapping(path = "/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequestDTO request) throws Exception {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequestDTO request) throws Exception {
         return Response.of(authService.register(request));
     }
 }

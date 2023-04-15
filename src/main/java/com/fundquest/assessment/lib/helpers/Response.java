@@ -25,26 +25,21 @@ public class Response {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("success", success);
 
-        if (message != null) {
+        if (message != null)
             body.put("message", message);
-        }
 
-        body.put("data", data);
+        if (data != null)
+            body.put("data", data);
 
         return ResponseEntity.status(status.value()).body(body);
     }
 
     public static ResponseEntity<Object> of(Object data) {
-        return Response.builder()
-                .success(true)
-                .data(data)
-                .status(HttpStatus.OK)
-                .build()
-                .entity();
+        return Response.from(data).entity();
     }
 
     public static ResponseEntity<Object> of(Page<?> data) {
-        return Response.of(PaginatedResult.from("entries", data));
+        return Response.named(data, "entities");
     }
 
     public static ResponseEntity<Object> of(Exception exception) {
@@ -53,6 +48,26 @@ public class Response {
 
     public static ResponseEntity<Object> of(Exception exception, HttpStatus status) {
         return Response.from(exception, status).entity();
+    }
+
+    // alias the supplied record inside the data Object
+    public static ResponseEntity<Object> named(Object data, String name) {
+        Map<String, Object> namedData = new LinkedHashMap<>();
+        namedData.put(name, data);
+
+        return Response.of(namedData);
+    }
+
+    public static ResponseEntity<Object> named(Page<?> data, String name) {
+        return Response.of(PaginatedResult.from(name, data));
+    }
+
+    public static Response from(Object data) {
+        return Response.builder()
+                .success(true)
+                .data(data)
+                .status(HttpStatus.OK)
+                .build();
     }
 
     public static Response from(Exception exception) {

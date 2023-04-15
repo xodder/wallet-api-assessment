@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.fundquest.assessment.user.deps.role.RoleService;
 import com.fundquest.assessment.user.deps.role.enums.RoleName;
-import com.fundquest.assessment.user.helpers.UserCreateRequestDTO;
+import com.fundquest.assessment.user.helpers.CreateUserRequestDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,7 +25,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll(request);
     }
 
-    public User create(UserCreateRequestDTO request) {
+    public User create(CreateUserRequestDTO request) {
         return userRepository.save(
                 User.builder()
                         .name(request.getName())

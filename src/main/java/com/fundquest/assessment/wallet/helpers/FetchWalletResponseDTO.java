@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetWalletResponseDTO {
+public class FetchWalletResponseDTO {
     private Wallet wallet;
 }

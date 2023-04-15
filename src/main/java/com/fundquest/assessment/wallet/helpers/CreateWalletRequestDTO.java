@@ -1,15 +1,17 @@
 package com.fundquest.assessment.wallet.helpers;
 
-import com.fundquest.assessment.user.User;
-import com.fundquest.assessment.wallet.deps.type.WalletType;
-
+import jakarta.annotation.Nonnull;
+import jakarta.validation.constraints.Min;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 @Builder
-@Value
+@Data
 public class CreateWalletRequestDTO {
-    private User user;
-    private WalletType type;
-    private Float initialBalance;
+    @Nonnull
+    @Min(1)
+    private Long walletTypeId;
+
+    @Builder.Default
+    private Float initialBalance = 0.0F;
 }

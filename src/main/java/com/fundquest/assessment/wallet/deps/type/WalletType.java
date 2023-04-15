@@ -1,5 +1,6 @@
 package com.fundquest.assessment.wallet.deps.type;
 
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,6 +24,7 @@ public class WalletType {
     @Column(name = "id")
     private Long id;
 
+    @Nonnull
     @Column(name = "name")
     private String name;
 

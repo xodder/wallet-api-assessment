@@ -5,7 +5,7 @@ import lombok.Value;
 
 @Builder
 @Value
-public class UserCreateRequestDTO {
+public class CreateUserRequestDTO {
     private String name;
     private String email;
     private String password;

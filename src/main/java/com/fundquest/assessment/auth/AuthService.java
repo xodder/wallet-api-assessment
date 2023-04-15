@@ -16,7 +16,7 @@ import com.fundquest.assessment.auth.helpers.RegisterResponseDTO;
 import com.fundquest.assessment.auth.security.jwt.JwtUtils;
 import com.fundquest.assessment.user.User;
 import com.fundquest.assessment.user.UserService;
-import com.fundquest.assessment.user.helpers.UserCreateRequestDTO;
+import com.fundquest.assessment.user.helpers.CreateUserRequestDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -55,7 +55,7 @@ public class AuthService {
 
         // create and persist user record
         User user = userService.create(
-                UserCreateRequestDTO.builder()
+                CreateUserRequestDTO.builder()
                         .name(request.getName())
                         .email(request.getEmail())
                         .password(encoder.encode(request.getPassword()))
