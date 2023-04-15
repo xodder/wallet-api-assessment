@@ -1,6 +1,5 @@
 package com.fundquest.assessment.lib.exception;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 
+import com.fundquest.assessment.lib.helpers.HashMapBuilder;
 import com.fundquest.assessment.lib.helpers.Response;
 
 @ControllerAdvice
@@ -23,7 +23,6 @@ public class PlatformControllerAdvice {
     public ResponseEntity<?> handleValidationExceptions(
             MethodArgumentNotValidException exception) {
         // build validation data field
-        Map<String, Object> data = new LinkedHashMap<>();
         Map<String, String> fields = new LinkedHashMap<>();
 
         exception.getBindingResult().getAllErrors().forEach((error) -> {
@@ -32,11 +31,11 @@ public class PlatformControllerAdvice {
             fields.put(fieldName, errorMessage);
         });
 
-        data.put("fields", fields);
-
         Response response = Response.from(exception, HttpStatus.BAD_REQUEST);
 
-        response.setData(data);
+        response.setData(new HashMapBuilder<>()
+                .entry("data", fields)
+                .build());
 
         return response.entity();
     }

@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.fundquest.assessment.lib.exception.PlatformException;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -32,6 +34,34 @@ public class Response {
             body.put("data", data);
 
         return ResponseEntity.status(status.value()).body(body);
+    }
+
+    public static Response from(Object data) {
+        return Response.builder()
+                .success(true)
+                .data(data)
+                .status(HttpStatus.OK)
+                .build();
+    }
+
+    public static Response from(Exception exception) {
+        return Response.from(exception, HttpStatus.BAD_REQUEST);
+    }
+
+    public static Response from(Exception exception, HttpStatus status) {
+        Object data = null;
+
+        if (exception instanceof PlatformException __exception) {
+            status = __exception.getStatus();
+            data = __exception.getMeta();
+        }
+
+        return Response.builder()
+                .message(exception.getMessage())
+                .success(false)
+                .status(status)
+                .data(data)
+                .build();
     }
 
     public static ResponseEntity<Object> of(Object data) {
@@ -62,24 +92,4 @@ public class Response {
         return Response.of(PaginatedResult.from(name, data));
     }
 
-    public static Response from(Object data) {
-        return Response.builder()
-                .success(true)
-                .data(data)
-                .status(HttpStatus.OK)
-                .build();
-    }
-
-    public static Response from(Exception exception) {
-        return Response.from(exception, HttpStatus.BAD_REQUEST);
-    }
-
-    public static Response from(Exception exception, HttpStatus status) {
-        return Response.builder()
-                .message(exception.getMessage())
-                .success(false)
-                .status(status)
-                .data(null)
-                .build();
-    }
 }

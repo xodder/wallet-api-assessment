@@ -3,11 +3,13 @@ package com.fundquest.assessment.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.fundquest.assessment.lib.exception.PlatformException;
 import com.fundquest.assessment.user.deps.role.RoleService;
 import com.fundquest.assessment.user.deps.role.enums.RoleName;
 import com.fundquest.assessment.user.helpers.CreateUserRequestDTO;
@@ -35,8 +37,10 @@ public class UserService implements UserDetailsService {
                         .build());
     }
 
-    public User getById(Long id) {
-        return userRepository.findById(id).orElseThrow();
+    public User getById(Long id) throws Exception {
+        return userRepository.findById(id).orElseThrow(
+                () -> new PlatformException("User not found")
+                        .setStatus(HttpStatus.NOT_FOUND));
     }
 
     public Boolean existsByEmail(String email) {

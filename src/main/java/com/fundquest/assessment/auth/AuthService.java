@@ -1,6 +1,10 @@
 package com.fundquest.assessment.auth;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,6 +18,8 @@ import com.fundquest.assessment.auth.helpers.LoginResponseDTO;
 import com.fundquest.assessment.auth.helpers.RegisterRequestDTO;
 import com.fundquest.assessment.auth.helpers.RegisterResponseDTO;
 import com.fundquest.assessment.auth.security.jwt.JwtUtils;
+import com.fundquest.assessment.lib.exception.PlatformException;
+import com.fundquest.assessment.lib.helpers.HashMapBuilder;
 import com.fundquest.assessment.user.User;
 import com.fundquest.assessment.user.UserService;
 import com.fundquest.assessment.user.helpers.CreateUserRequestDTO;
@@ -46,11 +52,13 @@ public class AuthService {
     public RegisterResponseDTO register(RegisterRequestDTO request) throws Exception {
         // check for email existence
         if (userService.existsByEmail(request.getEmail())) {
-            throw new Exception("Email is already in use");
-            // throw PlatformException.builder()
-            // .message("Email is already in use")
-            // .metaEntry("fields", null)
-            // .build();
+            Map<String, String> fields = new HashMapBuilder<String, String>()
+                    .entry("email", "Email is already in use")
+                    .build();
+
+            throw new PlatformException("Email is already in use")
+                    .setStatus(HttpStatus.BAD_REQUEST)
+                    .metaEntry("fields", fields);
         }
 
         // create and persist user record
@@ -62,16 +70,16 @@ public class AuthService {
                         .build());
 
         // authenticate user and generate token
-        // Authentication authentication = authenticationManager.authenticate(
-        // new UsernamePasswordAuthenticationToken(request.getEmail(),
-        // request.getPassword()));
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getEmail(),
+                        request.getPassword()));
 
-        // SecurityContextHolder.getContext().setAuthentication(authentication);
-        // String token = jwtUtils.generateJwtToken(authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String token = jwtUtils.generateJwtToken(authentication);
 
         return RegisterResponseDTO.builder()
                 .user(user)
-                .token("token")
+                .token(token)
                 .build();
     }
 

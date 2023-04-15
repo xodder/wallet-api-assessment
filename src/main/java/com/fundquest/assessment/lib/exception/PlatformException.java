@@ -1,21 +1,34 @@
 package com.fundquest.assessment.lib.exception;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.Singular;
+import lombok.experimental.Accessors;
 
-@Builder
 @Setter
 @Getter
+@Accessors(chain = true)
 public class PlatformException extends Exception {
-    @Builder.Default
     private HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+    private Map<String, Object> meta = new LinkedHashMap<>();
 
-    @Singular(value = "metaEntry", ignoreNullCollections = true)
-    private Map<String, Object> meta;
+    public PlatformException() {
+    }
+
+    public PlatformException(String message) {
+        super(message);
+    }
+
+    public PlatformException metaEntry(String key, Object value) {
+        meta.put(key, value);
+        return this;
+    }
+
+    public String getMessage() {
+        return super.getMessage();
+    }
 }

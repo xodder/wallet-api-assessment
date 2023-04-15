@@ -38,7 +38,7 @@ public class UserEndpoint {
 
     @GetMapping(path = "/{id}")
     @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity<?> getById(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<?> getById(@PathVariable(name = "id") Long id) throws Exception {
         return Response.of(new FetchUserResponseDTO(userService.getById(id)));
     }
 

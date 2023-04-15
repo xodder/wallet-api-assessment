@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.fundquest.assessment.lib.helpers.HashMapBuilder;
 import com.fundquest.assessment.transaction.helpers.CreateTransactionRequestDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,12 +40,11 @@ public class TransactionService {
     }
 
     private Map<String, Object> buildTransactionMeta(CreateTransactionRequestDTO request) {
-        Map<String, Object> meta = new LinkedHashMap<>();
+        return new HashMapBuilder<String, Object>()
+                .entry("ip", httpServletRequest.getLocalAddr())
+                .entry("user_agent", httpServletRequest.getHeader("user-agent"))
+                .build();
 
-        meta.put("ip", httpServletRequest.getLocalAddr());
-        meta.put("user_agent", httpServletRequest.getHeader("user-agent"));
-
-        return meta;
     }
 
 }
