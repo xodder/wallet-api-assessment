@@ -69,7 +69,7 @@ public class WalletEndpoint {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping(path = "transfer") // could have been "{id}/transfer"
-    public ResponseEntity<?> performTransfer(@Valid @RequestBody TransferRequestDTO request) {
+    public ResponseEntity<?> performTransfer(@Valid @RequestBody TransferRequestDTO request) throws Exception {
         return Response.of(new FetchWalletResponseDTO(walletService.transfer(request)));
     }
 

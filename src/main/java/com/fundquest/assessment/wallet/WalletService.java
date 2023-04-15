@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.fundquest.assessment.lib.exception.PlatformException;
+import com.fundquest.assessment.lib.helpers.HashMapBuilder;
 import com.fundquest.assessment.transaction.Transaction;
 import com.fundquest.assessment.transaction.TransactionService;
 import com.fundquest.assessment.transaction.enums.TransactionStatus;
@@ -39,7 +40,10 @@ public class WalletService {
     public Wallet create(User issuer, CreateWalletRequestDTO request) throws Exception {
         WalletType walletType = walletTypeRepository.findById(request.getWalletTypeId())
                 .orElseThrow(() -> new PlatformException("Wallet type not found")
-                        .setStatus(HttpStatus.NOT_FOUND));
+                        .setStatus(HttpStatus.NOT_FOUND).metaEntry("fields",
+                                new HashMapBuilder<>()
+                                        .entry("wallet_type_id", "A wallet type with this id does not exist")
+                                        .build()));
 
         return walletRepository.save(
                 Wallet.builder()
@@ -65,18 +69,24 @@ public class WalletService {
     }
 
     @Transactional(rollbackOn = { Exception.class })
-    public Wallet transfer(TransferRequestDTO request) {
-        Wallet sourceWallet = walletRepository.findById(request.getSourceWalletId()).orElseThrow();
-        Wallet targetWallet = walletRepository.findById(request.getTargetWalletId()).orElseThrow();
+    public Wallet transfer(TransferRequestDTO request) throws Exception {
+        Wallet sourceWallet = walletRepository.findById(request.getSourceWalletId()).orElseThrow(
+                () -> new PlatformException("Source wallet does not exist").setStatus(HttpStatus.NOT_FOUND));
+        Wallet targetWallet = walletRepository.findById(request.getTargetWalletId()).orElseThrow(
+                () -> new PlatformException("Target wallet does not exist").setStatus(HttpStatus.NOT_FOUND));
 
         // can this transfer be made?
         if (request.getAmount() > sourceWallet.getBalance())
-            throw new ServiceException("Balance in wallet not enough");
+            throw new PlatformException("Balance in wallet not enough").setStatus(HttpStatus.BAD_REQUEST)
+                    .metaEntry("fields",
+                            new HashMapBuilder<>().entry("amount", "Amount is greater then allowed").build());
 
         Double newBalanceAfterAction = sourceWallet.getBalance() - request.getAmount();
         if (newBalanceAfterAction < sourceWallet.getType().getMinimumBalance())
-            throw new ServiceException(
-                    "Transfer cannot be made because your remaining balance will be lower than the minimum balance allowed in this wallet");
+            throw new PlatformException(
+                    "Transfer cannot be made because your remaining balance will be lower than the minimum balance allowed in this wallet")
+                    .setStatus(HttpStatus.BAD_REQUEST).metaEntry("fields",
+                            new HashMapBuilder<>().entry("amount", "Amount is greater than allowed").build());
 
         // process the sender's side of the transaction
         Transaction senderTransaction = transactionService.create(

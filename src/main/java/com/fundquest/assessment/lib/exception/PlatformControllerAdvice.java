@@ -34,7 +34,7 @@ public class PlatformControllerAdvice {
         Response response = Response.from(exception, HttpStatus.BAD_REQUEST);
 
         response.setData(new HashMapBuilder<>()
-                .entry("data", fields)
+                .entry("fields", fields)
                 .build());
 
         return response.entity();

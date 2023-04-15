@@ -52,13 +52,11 @@ public class AuthService {
     public RegisterResponseDTO register(RegisterRequestDTO request) throws Exception {
         // check for email existence
         if (userService.existsByEmail(request.getEmail())) {
-            Map<String, String> fields = new HashMapBuilder<String, String>()
-                    .entry("email", "Email is already in use")
-                    .build();
-
             throw new PlatformException("Email is already in use")
                     .setStatus(HttpStatus.BAD_REQUEST)
-                    .metaEntry("fields", fields);
+                    .metaEntry("fields", new HashMapBuilder<String, String>()
+                            .entry("email", "Email is already in use")
+                            .build());
         }
 
         // create and persist user record
